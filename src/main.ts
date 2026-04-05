@@ -1,10 +1,9 @@
 import { createApp } from 'vue';
 import './assets/main.css';
 import App from './App.vue';
-// import TimeCalculator from './components/TimeCalculator.vue';
+import router from './router';
 
 const app = createApp(App);
 
-// app.component('TimeCalculator', TimeCalculator);
-
+app.use(router);
 app.mount('#app');
