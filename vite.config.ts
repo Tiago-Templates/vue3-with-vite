@@ -3,10 +3,22 @@ import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
+import VueDevTools from 'vite-plugin-vue-devtools';
+import Inspector from 'vite-plugin-vue-inspector';
+// import { VitePluginInspectorOptions } from "vite-plugin-vue-inspector";
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [vue(), tailwindcss()],
+    plugins: [
+        tailwindcss(),
+        VueDevTools({
+            launchEditor: 'vscode',
+            // componentInspector: /* boolean | VitePluginInspectorOptions */,
+        }),
+        Inspector(/* VitePluginInspectorOptions */),
+        vue(),
+        //
+    ],
     resolve: {
         alias: {
             '@@': path.resolve(__dirname, './'),
@@ -29,14 +41,26 @@ export default defineConfig({
         },
     },
     server: {
-        host: '0.0.0.0',
-        // allowedHosts: true, // Any host
+        // host: '0.0.0.0',
+        host: true,
+        /*
         allowedHosts: [
-            'localhost',
-            'app.tiagofranca.com',
-            'app.local.tiagofranca.com',
-            'app.hml.tiagofranca.com',
+            'app.tiagoapps.com.br',
+            'app.local.tiagoapps.com.br',
+            'app.hml.tiagoapps.com.br',
             // ... other hosts
         ],
+        /* */
+        allowedHosts: true, // Any host
+        proxy: {
+            '/__open-in-editor': {
+                /* If frontend in a Docker container, use 'http://host.docker.internal:3001' */
+                target: process.env.OPEN_IN_EDITOR_URL || 'http://localhost:3001',
+                changeOrigin: true,
+            },
+        },
+        fs: {
+            strict: false,
+        },
     },
 });
